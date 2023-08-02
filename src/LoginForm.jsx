@@ -1,32 +1,39 @@
-import React, { useRef, useState, createContext } from 'react'
+import React, { useRef, useState, createContext, useContext } from 'react'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebase';
+import authContext from './authContext';
 
 const LoginForm = () => {
   const emailRef = useRef('')
   const passwordRef = useRef('')
   const [login, setLogin] = useState(true)
+  const {setUser} = useContext(authContext)
   
   const handleSubmit = (e) => {
     e.preventDefault()
+
     if (login){
       signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
         .then((userCredential) => {
           // Signed in 
-          const user = userCredential.user;
-          console.log(user)
+          const response = userCredential.user;
+          setUser({
+            uid: response.uid
+          })
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(errorCode, errorMessage)
         });
-    } else {
-      createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
+      } else {
+        createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
         .then((userCredential) => {
           // Signed in 
-          const user = userCredential.user;
-          console.log(user)
+          const response = userCredential.user;
+          setUser({
+            uid: response.uid
+          })
         })
         .catch((error) => {
           const errorCode = error.code;
