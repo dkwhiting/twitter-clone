@@ -7,6 +7,8 @@ import authContext from './authContext'
 function App() {
   const [user, setUser] = useState({})
 
+  console.log(user)
+
   return (
     <>
       <authContext.Provider value={{ user, setUser }}>
