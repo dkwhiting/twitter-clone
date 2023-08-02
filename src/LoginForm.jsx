@@ -1,8 +1,6 @@
 import React, { useRef, useState, createContext, useContext } from 'react'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import {doc, setDoc } from "firebase/firestore"
-import { auth, db } from '../firebase';
 import authContext from './authContext';
+import { loginUser, registerUser } from './authContext';
 
 const LoginForm = () => {
   const emailRef = useRef('')
@@ -13,58 +11,26 @@ const LoginForm = () => {
   const {setUser} = useContext(authContext)
   const {user} = useContext(authContext)
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-
+    let response
     if (login){
-      signInWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
-        .then((userCredential) => {
-          // Signed in 
-          const response = userCredential.user;
-          setUser({
-            uid: response.uid,
-            username: usernameRef.current.value
-          })
-          setNotif('Log in successful')
-        })
-        .then(() =>{
-          window.localStorage.setItem('user', JSON.stringify(user))
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          setNotif(errorMessage)
-        });
+      response = await loginUser(emailRef.current.value, passwordRef.current.value)
       } else {
-        createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
-        .then((userCredential) => {
-          // Signed in 
-          const response = userCredential.user;
-          setUser({
-            uid: response.uid,
-            username: usernameRef.current.value
-          })
-          
-          setNotif('Registration successful')
-        })
-        .then(() =>{
-          setDoc(doc(db, "users", user.uid), {
-            username: usernameRef.current.value,
-            likes: [],
-            followers: [],
-            followings: [],
-          })
-          window.localStorage.setItem('user', JSON.stringify(user))
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          setNotif(errorMessage)
-        });
+      response = await registerUser(emailRef.current.value, usernameRef.current.value, passwordRef.current.value)
+    }
+    if (response.uid){
+      setUser({
+        uid: response.uid,
+      })
+      setNotif("Login Successful")
+    } else if (response.errorMessage){
+      setNotif(response.errorMessage)
     }
 
-    emailRef.current.value = ""
-    passwordRef.current.value = ""
+
+    // emailRef.current.value = ""
+    // passwordRef.current.value = ""
   }
   
   return (
