@@ -7,6 +7,7 @@ const LoginForm = () => {
   const emailRef = useRef('')
   const passwordRef = useRef('')
   const [login, setLogin] = useState(true)
+  const [errorNotif, setErrorNotif] = useState('')
   const {setUser} = useContext(authContext)
   
   const handleSubmit = (e) => {
@@ -24,7 +25,7 @@ const LoginForm = () => {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorCode, errorMessage)
+          setErrorNotif(errorMessage)
         });
       } else {
         createUserWithEmailAndPassword(auth, emailRef.current.value, passwordRef.current.value)
@@ -38,7 +39,7 @@ const LoginForm = () => {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorCode, errorMessage)
+          setErrorNotif(errorMessage)
         });
     }
 
@@ -57,8 +58,13 @@ const LoginForm = () => {
       
     </div>
   
-    <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form className="space-y-6" onSubmit={e => handleSubmit(e)}>
+    <div className="flex flex-col items-center mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+      {errorNotif
+      ? <p className="text-red-500">{errorNotif}</p>
+      : null
+      }
+      
+      <form className="w-full space-y-6" onSubmit={e => handleSubmit(e)}>
         <div>
           <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
           <div className="mt-2">
