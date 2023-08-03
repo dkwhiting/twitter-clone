@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import LoginForm from './Login'
+import authContext from '../pages/authContext'
+import { initializeUser } from '../pages/authContext'
 
-import './App.css'
-import LoginForm from './LoginForm'
-import authContext from './authContext'
-import { initializeUser } from './authContext'
 
-function App() {
-  const [user, setUser] = useState(null)
+const App = () => {
+const [user, setUser] = useState(null)
 
   // Initialized user from localStorage on App mount
   useEffect(() => {
