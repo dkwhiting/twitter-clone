@@ -19,18 +19,18 @@ const LoginForm = () => {
       } else {
       response = await registerUser(emailRef.current.value, usernameRef.current.value, passwordRef.current.value)
     }
-    if (response.uid){
-      setUser({
-        uid: response.uid,
-      })
+    if (response.userId){
+      console.log(response)
+      setUser(response)
+      localStorage.setItem('userId', JSON.stringify(response.userId)
+      )
       setNotif("Login Successful")
     } else if (response.errorMessage){
       setNotif(response.errorMessage)
     }
-
-
-    // emailRef.current.value = ""
-    // passwordRef.current.value = ""
+    emailRef.current.value = ""
+    usernameRef.current.value = ""
+    passwordRef.current.value = ""
   }
   
   return (
