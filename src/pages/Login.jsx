@@ -1,8 +1,10 @@
+
 import React, { useRef, useState, createContext, useContext } from 'react'
 import authContext from './authContext';
 import { loginUser, registerUser } from './authContext';
+import '../app/globals.css'
 
-const LoginForm = () => {
+const Login = () => {
   const emailRef = useRef('')
   const passwordRef = useRef('')
   const usernameRef = useRef('')
@@ -104,4 +106,4 @@ const LoginForm = () => {
   )
 }
 
-export default LoginForm
+export default Login

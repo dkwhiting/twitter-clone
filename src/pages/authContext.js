@@ -64,7 +64,7 @@ export const fetchUserData = async (userId) => {
 }
 
 export const initializeUser = async () => {
-  const userId = JSON.parse(window.localStorage.getItem('userId'))
+  const userId = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userId')) : null
   console.log(userId)
   if (userId) {
     const userData = await fetchUserData(userId)
