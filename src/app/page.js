@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react'
 import Login from '../pages/Login'
 import authContext from '../pages/authContext'
 import { initializeUser } from '../pages/authContext'
+import { useRouter } from 'next/navigation'
 
 
 const App = () => {
-const [user, setUser] = useState(null)
+  const router = useRouter()
+  const [user, setUser] = useState(null)
 
   // Initialized user from localStorage on App mount
   useEffect(() => {
@@ -14,11 +16,17 @@ const [user, setUser] = useState(null)
       if (window){
       const initializedUser = await initializeUser();
       setUser(initializedUser)
+      console.log('we have window', user)
     }
-    console.log('we have window', user)
     })();
-  console.log('no window')
+    console.log('no window')
   }, [])
+
+  useEffect(()=>{
+    if (user) {
+      router.push('/home')
+    }
+  },[user])
 
   return (
     <>

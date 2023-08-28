@@ -26,7 +26,3 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
-
-.container {
-  background-color: red;
-}
